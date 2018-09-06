@@ -1,0 +1,74 @@
+---
+heat_template_version: 2016-10-14
+
+description:
+  A network to host OpenShift SDN
+
+parameters:
+  # Networks to connect to or create
+  external_network:
+    type: string
+    description: >
+      The external network that provides floating IP addresses for the nodes
+    constraints:
+    - custom_constraint: neutron.network
+
+  network_name_prefix:
+    type: string
+    description: >
+      The name of the network to create
+    default: osp
+
+  service_subnet_cidr:
+    type: string
+    description: >
+      The subnet used for instance to instance communication
+    default: 10.0.1.0/24
+
+  dns_nameservers:
+    type: comma_delimited_list
+    description: Addresses of a dns nameserver reachable in your environment
+
+  router_id:
+    type: string
+    description: The existing router id
+
+resources:
+
+  # Network Components
+  service_network:
+    type: OS::Neutron::Net
+    properties:
+      name:
+        str_replace:
+          template: "{{prefix}}-network"
+          params:
+            "{{prefix}}": {get_param: network_name_prefix}
+
+  service_subnet:
+    type: OS::Neutron::Subnet
+    properties:
+      cidr: {get_param: service_subnet_cidr}
+      network: {get_resource: service_network}
+      dns_nameservers: {get_param: dns_nameservers}
+      name:
+        str_replace:
+          template: "{{prefix}}-subnet"
+          params:
+            "{{prefix}}": {get_param: network_name_prefix}
+
+  external_router_interface:
+    type: OS::Neutron::RouterInterface
+    properties:
+      #router_id: {get_resource: external_router}
+      router_id: {get_param: router_id}
+      subnet: {get_resource: service_subnet}
+
+outputs:
+  openshift_network:
+    description: The network that carries OpenShift traffic
+    value: {get_resource: service_network}
+
+  openshift_subnet:
+    description: The subnet that carries OpenShift traffic
+    value: {get_resource: service_subnet}

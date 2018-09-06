@@ -1,0 +1,80 @@
+---
+- name: Inventory OpenShift Nodes
+  hosts: localhost
+  connection: local
+  become: no
+  gather_facts: no
+  environment:
+    OS_USERNAME: "{{ openstack_user }}"
+    OS_PASSWORD: "{{ openstack_passwd }}"
+    OS_AUTH_URL: http://{{ openstack_ip }}:5000/v3
+    OS_PROJECT_NAME: "{{ openstack_project }}"
+    OS_USER_DOMAIN_NAME: Default
+    OS_PROJECT_DOMAIN_NAME: Default
+    OS_IDENTITY_API_VERSION: 3
+
+  tasks:
+  - import_role:
+      name: osp-inventory
+
+- name: Configure Cinder v2 on all nodes
+  hosts: openshift
+  become: true
+  tasks:
+  - name: Specify cinder v2 API for cloudprovider
+    blockinfile:
+      path: /etc/origin/cloudprovider/openstack.conf
+      insertafter: EOF
+      block: |
+        [BlockStorage]
+        bs-version=v2
+    when: openshift_version == 3.7
+
+- name: Post Configuration of Masters
+  hosts: masters
+  become: true
+
+  tasks:
+    - name: Install python-passlib
+      yum:
+        name: python-passlib
+        state: installed
+
+    - name: Create OpenShift user
+      htpasswd:
+        path: /etc/origin/master/htpasswd
+        name: "{{ openshift_user }}"
+        password: "{{ openshift_passwd }}"
+        owner: root
+        mode: 0640
+
+    - name: Restart master service
+      service:
+        name: "{{ item }}"
+        state: restarted
+      with_items:
+        - atomic-openshift-master
+      when: 
+        - openshift_version == 3.7
+        - master_count == 1
+
+    - name: Restart multi-master services
+      service:
+        name: "{{ item }}"
+        state: restarted
+      with_items:
+        - atomic-openshift-master-controllers
+      when: 
+        - openshift_version == 3.7
+        - master_count > 1
+
+- name: Restart OpenShift Nodes
+  hosts: nodes,infras
+  become: true
+
+  tasks:
+    - name: Restart Node Services
+      service:
+        name: atomic-openshift-node
+        state: restarted
+      when: openshift_version == 3.7

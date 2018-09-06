@@ -1,0 +1,55 @@
+- name: check if Origin repo is installed
+  command: yum repoinfo centos-openshift-origin39
+  register: subs_result
+  failed_when: false
+  changed_when: "'This system is not yet registered' in subs_result.stderr"
+
+- name: Install Origin3.9 repo
+  yum:
+    name: centos-release-openshift-origin39
+    state: latest
+  retries: 5
+  delay: 5
+  when: subs_result.changed
+
+- name: Ensure that required packages are present on target hosts
+  yum:
+    name: "{{item}}"
+    state: latest
+  retries: 5
+  delay: 5
+  with_items: "{{packages}}"
+
+- name: Install Required Packages
+  yum:
+    name: "{{item}}"
+    state: installed
+  with_items: "{{packages}}"
+
+- name: Install required openstack packages for bastion
+  yum:
+    name: "{{item}}"
+    state: installed
+  with_items: "{{packages_bastion_openstack}}"
+
+- name: Install required openstack packages for bastion
+  yum:
+    name: "{{item}}"
+    state: installed
+  with_items: "{{packages_bastion_openshift}}"
+
+- name: Copy OpenStack ssh key to bastion
+  copy:
+    src: "{{ ssh_key_path }}"
+    dest: /home/centos/admin.pem
+    mode: 0400
+    owner: "{{ ssh_user }}"
+
+- name: Copy playbooks to bastion
+  copy:
+    src: "{{ playbook_dir }}"
+    dest: /home/{{ ssh_user }}
+    directory_mode: 0755
+    mode: 0755
+    owner: "{{ ssh_user }}"
+    group: "{{ ssh_user }}"
