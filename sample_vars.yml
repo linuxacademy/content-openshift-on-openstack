@@ -7,7 +7,7 @@ openstack_project: admin  ## This is the project for your user
 domain_name: ocp3.lab
 dns_forwarders: [8.8.8.8, 8.8.4.4]
 external_network: public
-service_subnet_cidr: 192.168.1.0/24  ## Change this to match your network CIDR
+service_subnet_cidr: 192.168.8.0/24  ## Change this to match your network CIDR
 router_id: <router id from 'openstack router list'>
 image: centos7
 ssh_user: centos
