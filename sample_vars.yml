@@ -1,22 +1,22 @@
 ---
 ### OpenStack Setting ###
 openstack_user: admin
-openstack_passwd: openstack
-openstack_ip: <ip address>
-openstack_project: Default
+openstack_passwd: openstack  ## update this to your OpenStack admin password
+openstack_ip: <ip address>  ## This should be your OpenStack controller IP
+openstack_project: admin  ## This is the project for your user
 domain_name: ocp3.lab
 dns_forwarders: [8.8.8.8, 8.8.4.4]
 external_network: public
-service_subnet_cidr: 192.168.1.0/24
+service_subnet_cidr: 192.168.1.0/24  ## Change this to match your network CIDR
 router_id: <router id from 'openstack router list'>
 image: centos7
 ssh_user: centos
-ssh_key_path: /root/.ssh/id_rsa.pub
+ssh_key_path: /root/openshift.pem  ## The path to your openshift SSH key
 ssh_key_name: openshift
 stack_name: openshift-cluster
 openstack_version: 13
 contact: admin@ocp3.lab
-heat_template_path: /root/openshift-on-openstack-123/heat/openshift.yaml
+heat_template_path: /root/content-openshift-on-openstack/heat/openshift.yaml
 
 ### OpenShift Settings ###
 openshift_version: 3.9
