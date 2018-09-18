@@ -1,16 +1,16 @@
-- name: check if Origin repo is installed
-  command: yum repoinfo centos-openshift-origin39
-  register: subs_result
-  failed_when: false
-  changed_when: "'This system is not yet registered' in subs_result.stderr"
-
 - name: Install Origin3.9 repo
   yum:
     name: centos-release-openshift-origin39
     state: latest
-  retries: 5
-  delay: 5
-  when: subs_result.changed
+    retries: 5
+    delay: 5
+
+- name: install OpenStack repo
+  yum:
+      name: centos-release-openstack-queens
+      state: latest
+      retries: 5
+      delay: 5
 
 - name: Ensure that required packages are present on target hosts
   yum:
