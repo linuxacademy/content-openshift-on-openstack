@@ -2,15 +2,11 @@
   yum:
     name: centos-release-openshift-origin39
     state: latest
-    retries: 5
-    delay: 5
 
 - name: install OpenStack repo
   yum:
       name: centos-release-openstack-queens
       state: latest
-      retries: 5
-      delay: 5
 
 - name: Ensure that required packages are present on target hosts
   yum:
