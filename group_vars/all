@@ -9,6 +9,7 @@ packages:
   - kexec-tools
   - sos
   - psacct
+  - NetworkManager
 packages_bastion_openshift:
   - centos-release-openstack-queens
   - centos-release-openshift-origin39
