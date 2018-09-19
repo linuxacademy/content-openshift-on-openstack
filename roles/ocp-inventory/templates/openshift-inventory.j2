@@ -15,6 +15,8 @@ openshift_deployment_type=origin
 containerized=false
 os_firewall_use_firewalld=true
 openshift_clock_enabled=true
+openshift_image_tag=v3.9.1
+openshift_release=v3.9
 
 # Set Domain for Apps
 openshift_master_default_subdomain=apps.{{ hostvars['infra0']['lb_infra'] }}.xip.io
