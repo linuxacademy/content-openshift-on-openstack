@@ -34,3 +34,15 @@
     name: "{{item}}"
     state: installed
   with_items: "{{packages}}"
+
+- name: Start NetworkManager
+  systemd:
+    name: NetworkManager
+    enabled: yes
+    state: started
+
+- name: Start firewalld
+  systemd:
+    name: firewalld
+    enabled: yes
+    state: started
