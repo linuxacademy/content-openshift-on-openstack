@@ -10,6 +10,7 @@ packages:
   - sos
   - psacct
   - NetworkManager
+  - firewalld
 packages_bastion_openshift:
   - centos-release-openstack-queens
   - centos-release-openshift-origin39

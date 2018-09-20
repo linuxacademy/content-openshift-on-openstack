@@ -1,12 +1,12 @@
-- name: Install Docker {{ docker_version }}
-  package:
-    name: docker-{{ docker_version }}
-    state: installed
-
 - name: Perform yum update
   yum:
     name=*
     state=latest
+
+- name: Install Docker {{ docker_version }}
+  package:
+    name: docker-{{ docker_version }}
+    state: installed
 
 - name: Update /etc/sysconfig/docker
   lineinfile:
