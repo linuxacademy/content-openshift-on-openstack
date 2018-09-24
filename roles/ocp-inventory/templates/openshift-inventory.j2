@@ -40,8 +40,9 @@ openshift_cloudprovider_openstack_tenant_name={{ openstack_project }}
 openshift_cloudprovider_openstack_region=RegionOne
 openshift_cloudprovider_openstack_blockstorage_version=v2
 
-# Enable htpasswd authentication; defaults to DenyAllPasswordIdentityProvider
-# openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider', 'filename': '/etc/origin/master/htpasswd'}]
+# DenyAllPasswordIdentityProvider - v3.9 installations now default to AllowAll
+#
+ openshift_master_identity_providers=[{'name': 'deny_all', 'login': 'true', 'challenge': 'true', 'kind': 'DenyAllPasswordIdentityProvider', 'filename': '/etc/origin/master/htpasswd'}]
 
 # Set networking to multi-tenant
 os_sdn_network_plugin_name='redhat/openshift-ovs-multitenant'
