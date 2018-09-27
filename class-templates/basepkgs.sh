@@ -8,7 +8,11 @@ sudo yum -y update
 
 sudo yum -y install wget git net-tools bind-utils yum-utils \
     iptables-servicesbridge-utils bash-completion \
-    kexec-tools sos psacct docker-1.13.1
+    kexec-tools sos psacct NetworkManager firewalld docker-1.13.1
+
+# Start NM & firewalld
+
+sudo systemctl enable --now NetworkManager firewalld
 
 # create docker-storage-setup
 
