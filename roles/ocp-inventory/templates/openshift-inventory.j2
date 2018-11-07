@@ -42,7 +42,7 @@ openshift_cloudprovider_openstack_blockstorage_version=v2
 
 # DenyAllPasswordIdentityProvider - v3.9 installations now default to AllowAll
 #
- openshift_master_identity_providers=[{'name': 'deny_all', 'login': 'true', 'challenge': 'true', 'kind': 'DenyAllPasswordIdentityProvider', 'filename': '/etc/origin/master/htpasswd'}]
+ openshift_master_identity_providers=[{'name': 'deny_all', 'login': 'true', 'challenge': 'true', 'kind': 'DenyAllPasswordIdentityProvider'}]
 
 # Set networking to multi-tenant
 os_sdn_network_plugin_name='redhat/openshift-ovs-multitenant'
